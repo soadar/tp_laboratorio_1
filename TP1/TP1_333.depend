@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1586844470 source:d:\daro\utn\programacion\codeblocks\tp1_333\utn.c
+	<stdio.h>
+	<stdlib.h>
+
+1586843693 source:d:\daro\utn\programacion\codeblocks\tp1_333\main.c
+	<stdio.h>
+	<stdlib.h>
+	"utn.h"
+
+1586845192 d:\daro\utn\programacion\codeblocks\tp1_333\utn.h
+	<stdio.h>
+	<stdlib.h>
+
