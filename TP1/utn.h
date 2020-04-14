@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 /** \brief Muestra menu principal
  *
  * \param x es el primer operando A
