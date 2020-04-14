@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "utn.h"
 
 char menuIngreso(int x, int y)
 {
@@ -101,7 +102,7 @@ int factorial (int* pResultado, int numero)
 {
     int bufferFact=1;
 
-    if(pResultado != NULL && numero != NULL)
+    if(pResultado != NULL && numero != 0)
     {
         for (int cont = 1; cont <= numero; cont++ )
         {

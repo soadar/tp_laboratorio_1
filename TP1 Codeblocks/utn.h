@@ -66,9 +66,10 @@ int factorial (int *pResultado, int numero);
 
 /** \brief realiza la division del operando A y el operando B
  *
+ * \param pResultado guarda el resultado del calculo en caso correcto
  * \param x es el primer operando A
  * \param x es el primer operando B
- * \return devuelve la division del operando A y el operando B
+ * \return devuelve 0 si el dato solicitado es correcto, -1 si el dato es invalido
  *
  */
 int dividir (float* pResultado, int numero1, int numero2);
@@ -76,7 +77,7 @@ int dividir (float* pResultado, int numero1, int numero2);
 
 /** \brief realiza la comprobacion si el valor ingresado es un dato numerico dentro del rango solicitado
  *
- * \param pResultado guarda el dato ingresado en caso correcto
+ * \param pResultado guarda el resultado del calculo en caso correcto
  * \param mensaje para que ingrese el dato solicitado
  * \param mensajeError mensaje de error si el valor no esta dentro de lo solicitado
  * \param minimo menor dato valido
