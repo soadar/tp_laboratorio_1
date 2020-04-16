@@ -91,7 +91,7 @@ int dividir (float* pResultado, int numero1, int numero2)
 int factorial (int unsigned* pResultado, int numero)
 {
     int unsigned bufferFact=1;
-    if(pResultado != NULL && numero != 0)
+    if(pResultado != NULL && numero > 0)
     {
         for (int cont = 1; cont <= numero; cont++ )
         {
