@@ -33,7 +33,7 @@ void menuCalculos(int x, int y)
 void menuResultados(int x, int y)
 {
     float bufferFloat;
-    int bufferInt;
+    int unsigned bufferInt;
     int resultado;
 
     printf("\n____________________________\n");
@@ -51,24 +51,14 @@ void menuResultados(int x, int y)
         printf("\nError\n");
     }
 
-    resultado = factorial(&bufferInt, x);
-    if (resultado == 0)
+    if (factorial(&bufferInt, x) == 0)
     {
         printf("\nEl factorial de %d  es : %d",x,bufferInt);
     }
-    else
-    {
-        printf("\nError, ingreso invalido\n");
-    }
 
-    resultado = factorial(&bufferInt, y);
-    if (resultado == 0)
+    if (factorial(&bufferInt, y) == 0)
     {
         printf("\nEl factorial de %d  es : %d",y,bufferInt);
-    }
-    else
-    {
-        printf("\nError, ingreso invalido\n");
     }
     printf("\n____________________________\n\n");
 }
@@ -98,18 +88,25 @@ int dividir (float* pResultado, int numero1, int numero2)
     return -1;
 }
 
-int factorial (int* pResultado, int numero)
+int factorial (int unsigned* pResultado, int numero)
 {
-    int bufferFact=1;
-
+    int unsigned bufferFact=1;
     if(pResultado != NULL && numero != 0)
     {
         for (int cont = 1; cont <= numero; cont++ )
         {
             bufferFact = bufferFact * cont;
         }
-        *pResultado = bufferFact;
-        return 0;
+
+        if (bufferFact > 0)
+        {
+            *pResultado = bufferFact;
+            return 0;
+        }
+        else
+        {
+            printf("\nEl factorial de %d no puede ser mostrado",numero);
+        }
     }
     return -1;
 }
@@ -117,29 +114,27 @@ int factorial (int* pResultado, int numero)
 int utn_getCaracter(char* pResultado, char* mensaje,char* mensajeError, char minimo,char maximo,int reintentos)
 {
     int retorno = -1;
-    char buffer;
+    char bufferChar;
     if(pResultado != NULL && mensaje != NULL && mensajeError != NULL && minimo <= maximo && reintentos >= 0)
     {
         do
         {
-            printf("\n%s\n",mensaje);
+            printf("\n%s",mensaje);
             fflush(stdin);
-            scanf("%c",&buffer);
-            if(buffer >= minimo && buffer <= maximo)
+            scanf("%c",&bufferChar);
+            if(bufferChar >= minimo && bufferChar <= maximo)
             {
-                *pResultado = buffer;
+                *pResultado = bufferChar;
                 retorno = 0;
                 break;
             }
-            printf("\n%s\n",mensajeError);
+            printf("\n%s",mensajeError);
             reintentos--;
         }
         while(reintentos>=0);
-
     }
     return retorno;
 }
-
 
 int utn_getNumero(int* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos)
 {
@@ -149,7 +144,7 @@ int utn_getNumero(int* pResultado, char* mensaje, char* mensajeError, int minimo
     {
         do
         {
-            printf("\n%s\n",mensaje);
+            printf("\n%s",mensaje);
             fflush(stdin);
             scanf("%d",&bufferInt);
             if(bufferInt >= minimo && bufferInt <= maximo)
@@ -160,11 +155,38 @@ int utn_getNumero(int* pResultado, char* mensaje, char* mensajeError, int minimo
             }
             else
             {
-                printf("\n%s\n",mensajeError);
+                printf("\n%s",mensajeError);
                 reintentos--;
             }
         }
         while(reintentos >= 0);
     }
     return retorno;
+}
+
+void validarOperandos (int* pCalculosOk, int buffer1, int buffer2, int x, int y)
+{
+    if ( buffer1==1 && buffer2==1 )
+    {
+        *pCalculosOk=1;
+        menuCalculos(x, y);
+    }
+    else if ( buffer1==0 && buffer2==1 )
+    {
+        printf("_____________________________________\n");
+        printf("\nFalta ingresar el operando A\n");
+        printf("_____________________________________\n\n");
+    }
+    else if ( buffer1==1 && buffer2==0 )
+    {
+        printf("_____________________________________\n");
+        printf("\nFalta ingresar el operando B\n");
+        printf("_____________________________________\n\n");
+    }
+    else
+    {
+        printf("_____________________________________\n");
+        printf("\nAun no ha ingresado ningun dato\n");
+        printf("_____________________________________\n\n");
+    }
 }

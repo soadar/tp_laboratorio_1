@@ -61,7 +61,7 @@ int multiplicacion(int x, int y);
  * \return devuelve el factorial del operando solicitado
  *
  */
-int factorial (int *pResultado, int numero);
+int factorial (int unsigned* pResultado, int numero);
 
 
 /** \brief realiza la division del operando A y el operando B
@@ -102,3 +102,15 @@ int utn_getNumero(int* pResultado, char* mensaje, char* mensajeError, int minimo
  *
  */
 int utn_getCaracter(char* pResultado, char* mensaje,char* mensajeError, char minimo,char maximo,int reintentos);
+
+
+
+
+/** \brief realiza la comprobacion si los operandos fueron ingresados
+ *
+ * \param pCalculosOk activa la bandera para poder utilizar el menu de resultados
+ * \param flagMenu1 bandera indicando si ingreso el primer operando
+ * \param flagMenu2bandera indicando si ingreso el segundo operando
+ *
+ */
+void validarOperandos (int* pCalculosOk, int flagMenu1, int flagMenu2, int x, int y);

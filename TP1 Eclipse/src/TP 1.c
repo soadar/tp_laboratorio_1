@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include "utn.h"
 
+
+
 int main()
 {
-    int respuesta;
     int x=0;
     int y=0;
-    int menu1ok=0;
-    int menu2ok=0;
-    int calculos;
+    int flagMenu1=0;
+    int flagMenu2=0;
+    int flagCalculos;
     int salida=0;
     int saltarPause=0;
 
@@ -18,50 +19,27 @@ int main()
         switch( menuIngreso(x, y) )
         {
         case 1 : /** Operando1 **/
-            respuesta = utn_getNumero(&x,"\n\nIngrese primer operando, en el rango de -32768 a 32767: ","\nError, el rango es de -32768 a 32767\n\n",-32768,32767,0);
-            if(respuesta == 0)
+            if(utn_getNumero(&x,"\nIngrese primer operando, en el rango de -32768 a 32767: ","\n________________________________\n\n El valor ingresado es incorrecto\n________________________________\n\n",-32768,32767,0) == 0)
             {
-                menu1ok=1;
+                flagMenu1=1;
                 break;
             }
             break;
+
         case 2 : /** Operando2 **/
-            respuesta = utn_getNumero(&y,"\n\nIngrese segundo operando, en el rango de -32768 a 32767: ","\nError, el rango es de -32768 a 32767\n\n",-32768,32767,2);
-            if(respuesta == 0)
+            if(utn_getNumero(&y,"\nIngrese segundo operando, en el rango de -32768 a 32767: ","\n________________________________\n\n El valor ingresado es incorrecto\n________________________________\n\n",-32768,32767,0) == 0)
             {
-                menu2ok=1;
+                flagMenu2=1;
                 break;
             }
             break;
-        case 3 : /** Calculos **/
-            if ( menu1ok==1 && menu2ok==1 )
-            {
-                calculos=1;
-                menuCalculos(x, y);
-            }
-            else if ( menu1ok==0 && menu2ok==1 )
-            {
-                printf("_____________________________________\n");
-                printf("\nFalta ingresar el operando A\n");
-                printf("_____________________________________\n\n");
-            }
-            else if ( menu1ok==1 && menu2ok==0 )
-            {
-                printf("_____________________________________\n");
-                printf("\nFalta ingresar el operando B\n");
-                printf("_____________________________________\n\n");
-            }
-            else
-            {
-                printf("_____________________________________\n");
-                printf("\nAun no ha ingresado ningun dato\n");
-                printf("_____________________________________\n\n");
-            }
 
+        case 3 :
+            validarOperandos(&flagCalculos, flagMenu1, flagMenu2, x, y);
             break;
-        case 4 :
 
-            if ( calculos == 1 )
+        case 4 :
+            if ( flagCalculos == 1 )
             {
                 menuResultados(x, y);
             }
@@ -73,6 +51,7 @@ int main()
             }
             /** resultados **/
             break;
+
         case 5 :
             salida = 1;
             printf("_____________________________________\n");
