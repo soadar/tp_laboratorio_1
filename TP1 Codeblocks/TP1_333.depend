@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1586920431 source:d:\daro\utn\programacion\codeblocks\tp1_333\utn.c
+1586932380 source:d:\daro\utn\programacion\codeblocks\tp1_333\utn.c
 	<stdio.h>
 	<stdlib.h>
 	"utn.h"

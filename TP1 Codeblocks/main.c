@@ -19,7 +19,7 @@ int main()
         switch( menuIngreso(x, y) )
         {
         case 1 : /** Operando1 **/
-            if(utn_getNumero(&x,"\nIngrese primer operando, en el rango de -32768 a 32767: ","\n________________________________\n\n El valor ingresado es incorrecto\n________________________________\n\n",-32768,32767,0) == 0)
+            if(utn_getNumero(&x,"\nIngrese A: ","\n________________________________\n\n Debe ingresar un valor entre -32768 y 32768\n________________________________\n\n",-32768,32767,0) == 0)
             {
                 flagMenu1=1;
                 break;
@@ -27,7 +27,7 @@ int main()
             break;
 
         case 2 : /** Operando2 **/
-            if(utn_getNumero(&y,"\nIngrese segundo operando, en el rango de -32768 a 32767: ","\n________________________________\n\n El valor ingresado es incorrecto\n________________________________\n\n",-32768,32767,0) == 0)
+            if(utn_getNumero(&y,"\nIngrese B: ","\n________________________________\n\n Debe ingresar un valor entre -32768 y 32768\n________________________________\n\n",-32768,32767,0) == 0)
             {
                 flagMenu2=1;
                 break;
