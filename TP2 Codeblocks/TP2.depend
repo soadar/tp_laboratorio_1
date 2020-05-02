@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1588305277 source:d:\daro\utn\programacion\codeblocks\tp2\utn.c
+
+1588388108 source:d:\daro\utn\programacion\codeblocks\tp2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
