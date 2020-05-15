@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "utn.h"
 
-#define TAM 2
+#define TAM 9
 #define TRUE 1
 #define FALSE 0
-#define SECTORES 10 // cantidad de sectores en la empresa
+#define TAMSEC 5 // cantidad de sectores en la empresa
 #define MAXSALARIO 1000000.00 // Maximo salario a pagar
+//#define IDINICIAL 1000
+
 
 typedef struct
 {
@@ -18,41 +21,62 @@ typedef struct
     int isEmpty;
 } Employee;
 
-int menuPrincipal();
+typedef struct
+{
+    int idS;
+    char nombreSec[20];
+} eSector;
 
-int buscarEmpy(Employee* list, int len);
-int preCarga(Employee* list, int tam);
+int menuPrincipal();
+int esLetra(char* cadena,int longitud);
+int getCadena(char* pResultado, int longitud,char* mensaje, char* mensajeError, int reintentos);
+void menuMod(Employee* list, int tam, int index, eSector* sectores, int tamsec);
+int buscarEmpty(Employee* list, int len);
+int preCarga(Employee* list, int tam, int check, eSector* sectores, int tamsec);
 int initEmployees(Employee* list, int len);
 int printEmployees(Employee* list, int length);
 void preBaja(Employee* list, int tam, int check);
-void menuMod(Employee* list, int tam, int index);
 void prePrint(Employee* list, int tam, int check);
 int removeEmployee(Employee* list, int len, int id);
 int findEmployeeById(Employee* list, int len,int id);
-void preBusqueda(Employee* list, int tam, int check);
+void preBusqueda(Employee* list, int tam, int check, eSector* sectores, int tamsec);
 int sortEmployees(Employee* list, int len, int order);
+int utn_getNombre(char* pResultado, int longitud,char* mensaje, char* mensajeError, int reintentos);
 void promedioYtotal (Employee* list, int tam, float* pTotalSalary, float* pPromedio, int* pPromUp);
 int addEmployee(Employee* list, int len, int id, char name[],char lastName[],float salary,int sector);
 int utn_getNumero(int* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos);
+void listarSectores(eSector* sectores, int tamSec);
+void harcodeoEmpleados(Employee* lista, int tam);
+
 
 int main()
 {
-    int salida=0;
-    int cargaInicial=-1;
+    int salida = 0;
+    int cargaInicial = -2;
+    int IdEmp = 1000;
+
     Employee list[TAM];
+    eSector sectores[TAMSEC]= { {1, "sistemas"}, {2, "RRHH"}, {3, "Compras"}, {4, "Ventas"}, {5, "Contable"}};
 
     initEmployees(list,TAM);
+    harcodeoEmpleados(list, TAM);
 
     do
     {
+        cargaInicial = buscarEmpty(list, TAM) + IdEmp;
         system("cls");
+
         switch (menuPrincipal())
         {
         case 1: //alta
-            cargaInicial = preCarga(list, TAM);
+            if (preCarga(list, TAM, cargaInicial, sectores, TAMSEC))
+            {
+            IdEmp++;
+            }
+            //if carga == 0 // flag = 1
             break;
         case 2: //mod
-            preBusqueda(list, TAM, cargaInicial);
+            preBusqueda(list, TAM, cargaInicial, sectores, TAMSEC);
             break;
         case 3://baja
             preBaja(list, TAM, cargaInicial);
@@ -95,9 +119,8 @@ int initEmployees(Employee* list, int len)
         }
         return 0;
     }
-    return -1;
+    return -2;
 }
-
 
 /** \brief add in a existing list of employees the values received as parameters
  *      in the first empty position
@@ -115,14 +138,20 @@ int initEmployees(Employee* list, int len)
 //Agrega en un array de empleados existente los valores recibidos como parámetro en la primer posición libre.
 int addEmployee(Employee* list, int len, int id, char name[],char lastName[],float salary,int sector)
 {
+    int indice;
+    Employee auxList;
+    indice = buscarEmpty(list, len);
+
     if( list != NULL && name != NULL && lastName != NULL && len >= 0 && len < 1000)
     {
-        strcpy (list[id].name, name);
-        strcpy (list[id].lastName, lastName);
-        list[id].salary=salary;
-        list[id].sector=sector;
-        list[id].isEmpty=FALSE;
-        list[id].id=id;
+        strcpy (auxList.name, name);
+        strcpy (auxList.lastName, lastName);
+        auxList.salary=salary;
+        auxList.sector=sector;
+        auxList.isEmpty=FALSE;
+        auxList.id=id;
+
+        list[indice]=auxList;
         printf("\nCarga Exitosa\n\n");
         system("pause");
         return 0;
@@ -192,7 +221,7 @@ int removeEmployee(Employee* list, int len, int id)
             {
                 system ("cls");
                 printf("\n_______________________________________________________________\n");
-                printf("\n__________________Dando de baja al empleado:___________________\n\n");
+                printf("\n__________________Dando la baja del empleado:___________________\n\n");
                 printf("\nID           Nombre         Apellido        Salario     Sector\n\n");
                 printf("%03d    %12s    %12s         %8.2f     %2d\n", list[i].id,list[i].name,list[i].lastName,list[i].salary,list[i].sector);
                 printf("\n_______________________________________________________________\n");
@@ -300,7 +329,7 @@ int menuPrincipal()
     printf("2) Modificar \n");
     printf("3) Baja \n");
     printf("4) Informar \n");
-    utn_getNumero(&resp, "\nIngrese una opcion: ", "\nError, ingreso incorrecto, debe ingresar de 1 a 4", 1, 6, 0);
+    utn_getNumero(&resp, "\nIngrese una opcion: ", "\nError, ingreso incorrecto, debe ingresar de 1 a 4\n", 1, 6, 3);
     return resp;
 }
 
@@ -351,7 +380,7 @@ int utn_getNumero(int* pResultado, char* mensaje, char* mensajeError, int minimo
             {
                 printf("\n%s",mensajeError);
                 reintentos--;
-                system("pause>nul");
+//                system("pause>nul");
             }
         }
         while(reintentos >= 0);
@@ -359,37 +388,7 @@ int utn_getNumero(int* pResultado, char* mensaje, char* mensajeError, int minimo
     return -1;
 }
 
-void menuMod(Employee* list, int tam, int index)
-{
-    int resp;
-    printf("\nQue desea modificar?\n\n");
-    printf("1) Nombre\n");
-    printf("2) Apellido\n");
-    printf("3) Salario\n");
-    printf("4) Sector\n");
-    utn_getNumero(&resp, "\nIngrese una opcion: ", "\nError, ingreso incorrecto, debe ingresar de 1 a 4\n", 1, 4, 3);
-    switch (resp)
-    {
-    case 1 :
-        printf("\nIngrese nuevo nombre: ");
-        fflush(stdin);
-        gets(list[index].name);
-        break;
-    case 2 :
-        printf("\nIngrese nuevo apellido: ");
-        fflush(stdin);
-        gets(list[index].lastName);
-        break;
-    case 3 :
-        utn_getNumeroFlotante(&list[index].salary, "\nIngrese nuevo salario: ", "\nError, salario demasiado alto\n", 0, MAXSALARIO, 3);
-        break;
-    case 4:
-        utn_getNumero(&list[index].sector, "\nIngrese nuevo sector: ", "Error, sector incorrecto", 0, SECTORES, 3);
-        break;
-    }
-}
-
-int buscarEmpy(Employee* list, int len)
+int buscarEmpty(Employee* list, int len)
 {
     for (int i=0; i < len; i++)
     {
@@ -401,18 +400,20 @@ int buscarEmpy(Employee* list, int len)
     return -1;
 }
 
-int preCarga(Employee* list, int tam)
+int preCarga(Employee* list, int tam, int check, eSector* sectores, int tamsec)
 {
     char auxName[51];
     char auxApe[51];
     float auxSal;
     int auxSec;
-    int auxID;
     int auxCarga;
 
-    auxID = buscarEmpy(list, tam);
-
-    if (auxID >= 0 && auxID < tam)
+    if (check == -1)
+    {
+        printf("\nError, La base de datos esta completa\n");
+        system("pause>nul");
+    }
+    else
     {
         system("CLS");
         printf("\n\n*************************************\n");
@@ -425,60 +426,58 @@ int preCarga(Employee* list, int tam)
         fflush(stdin);
         gets(auxApe);
         utn_getNumeroFlotante(&auxSal, "\nIngrese nuevo salario: ", "\nError, salario demasiado alto\n", 0, MAXSALARIO, 3);
-        utn_getNumero(&auxSec, "Ingrese nuevo sector: ", "\nError, sector incorrecto", 0, SECTORES, 3);
-
-        auxCarga=addEmployee(list, tam, auxID, auxName, auxApe, auxSal, auxSec);
-
+//  listar sectores
+        listarSectores(sectores, tamsec);
+        utn_getNumero(&auxSec, "Ingrese nuevo sector: ", "\nError, sector incorrecto", 0, TAMSEC, 3);
+        auxCarga=addEmployee(list, tam, check, auxName, auxApe, auxSal, auxSec);
         return auxCarga;
-    }
-    else
-    {
-        printf("\nError, La base de datos esta completa\n");
-        system("pause>nul");
     }
     return -1;
 }
 
 
-void preBusqueda(Employee* list, int tam, int check)
+void preBusqueda(Employee* list, int tam, int check, eSector* sectores, int tamsec)
 {
     int index;
     int auxID;
-    if (check == 0)
+    if (check == -2)
+    {
+        printf("\n\n*************************************\n");
+        printf("*    La base de datos esta vacia    *\n");
+        printf("*************************************\n\n");
+        system("pause");
+
+
+    }
+    else
     {
         printf("\nIngrese ID del empleado: ");
         scanf("%d",&auxID);
         index = findEmployeeById(list, TAM, auxID);
         if (index >= 0)
         {
-            menuMod(list, tam, index);
+            menuMod(list, tam, index, sectores, TAMSEC);
         }
     }
-    else
-    {
-        printf("\n\n*************************************\n");
-        printf("*    La base de datos esta vacia    *\n");
-        printf("*************************************\n\n");
-        system("pause");
-    }
 }
-
 
 void preBaja(Employee* list, int tam, int check)
 {
     int auxID;
-    if (check == 0)
-    {
-        printf("\nIngrese ID del empleado para la baja: ");
-        scanf("%d",&auxID);
-        removeEmployee(list, tam, auxID);
-    }
-    else
+    if (check == -2)
     {
         printf("\n\n*************************************\n");
         printf("*    La base de datos esta vacia    *\n");
         printf("*************************************\n\n");
         system("pause");
+
+
+    }
+    else
+    {
+        printf("\nIngrese ID del empleado para la baja: ");
+        scanf("%d",&auxID);
+        removeEmployee(list, tam, auxID);
     }
 }
 
@@ -489,15 +488,25 @@ void prePrint(Employee* list, int tam, int check)
     float total;
     float promedio;
     int salaryUp;
-    if (check == 0)
+    if (check == -2)
     {
-        printf("\n1) Listado de los empleados ordenados alfabéticamente por Apellido y Sector.");
-        printf("\n2) Total y promedio de los salarios, y cuántos empleados superan el salario promedio. \n");
-        utn_getNumero(&resp, "\nIngrese una opcion: ", "\nError, ingreso incorrecto, debe ingresar 0 o 1\n", 1, 2, 3);
+
+        printf("\n\n*************************************\n");
+        printf("*    La base de datos esta vacia    *\n");
+        printf("*************************************\n\n");
+        system("pause");
+
+
+    }
+    else
+    {
+
+        printf("\n1) Listado de los empleados ordenados alfabeticamente por Apellido y Sector.");
+        printf("\n2) Total y promedio de los salarios, y cuantos empleados superan el salario promedio. \n");
+        utn_getNumero(&resp, "\nIngrese una opcion: ", "\nError, ingreso incorrecto, debe ingresar 1 o 2\n", 1, 2, 3);
         if (resp == 1)
         {
-            printf("\n0) orden ascendente\n1) orden descendente\n\n");
-            scanf("%d",&criterio);
+            utn_getNumero(&criterio, "\n0) orden ascendente\n1) orden descendente\n", "\nError, ingreso incorrecto, debe ingresar 0 o 1\n", 0, 1, 3);
             sortEmployees(list, tam, criterio);
             printEmployees(list, tam);
         }
@@ -508,13 +517,6 @@ void prePrint(Employee* list, int tam, int check)
             printf("%7.2f     %7.2f         %d\n\n", total, promedio, salaryUp);
             system("pause>nul");
         }
-    }
-    else
-    {
-        printf("\n\n*************************************\n");
-        printf("*    La base de datos esta vacia    *\n");
-        printf("*************************************\n\n");
-        system("pause");
     }
 }
 
@@ -546,3 +548,82 @@ void promedioYtotal (Employee* list, int tam, float* pTotalSalary, float* pProme
     }
     *pPromUp = contProm;
 }
+
+void menuMod(Employee* list, int tam, int index, eSector* sectores, int tamsec)
+{
+    int resp;
+    printf("\n\n*************************************\n");
+    printf("*        Modificacion de usuarios        *\n");
+    printf("*************************************\n\n");
+    printf("\nQue desea modificar?\n\n");
+    printf("1) Nombre\n");
+    printf("2) Apellido\n");
+    printf("3) Salario\n");
+    printf("4) Sector\n");
+    utn_getNumero(&resp, "\nIngrese una opcion: ", "\nError, ingreso incorrecto, debe ingresar de 1 a 4\n", 1, 4, 3);
+    switch (resp)
+    {
+    case 1 :
+        printf("\nIngrese nuevo nombre: ");
+        fflush(stdin);
+        gets(list[index].name);
+        printf("\nCarga Exitosa\n\n");
+        system("pause");
+        break;
+    case 2 :
+        printf("\nIngrese nuevo apellido: ");
+        fflush(stdin);
+        gets(list[index].lastName);
+        printf("\nCarga Exitosa\n\n");
+        system("pause");
+        break;
+    case 3 :
+        utn_getNumeroFlotante(&list[index].salary, "\nIngrese nuevo salario: ", "\nError, salario demasiado alto\n", 0, MAXSALARIO, 3);
+        printf("\nCarga Exitosa\n\n");
+        system("pause");
+        break;
+    case 4:
+        listarSectores(sectores, tamsec);
+        utn_getNumero(&list[index].sector, "\nIngrese nuevo sector: ", "Error, sector incorrecto", 0, TAMSEC, 3);
+        printf("\nCarga Exitosa\n\n");
+        system("pause");
+        break;
+    }
+}
+
+void harcodeoEmpleados(Employee* lista, int tam)
+{
+    int id[10]= {100,200,300,400,500,600,700,800,900,1000};
+    char nombre[10][30]= {"felipe", "miguel", "victor", "maria", "daniela", "daniel", "horacio", "dario", "sergia", "puma"};
+    char apellido[10][30]= {"yerba", "azucar", "harina", "mayo", "coca", "queso", "manzana", "remera", "agua", "silla"};
+    float salario[10]= {100.65, 2200.36, 874.8445, 15185.10, 5514.7, 4545.9, 6565.47, 9898.4, 74878.98, 999.99};
+    int sector[10]= {1,2,4,6,5,6,7,8,9,1};
+    int isEmpy[10]= {0,0,0,0,0,0,0,0,0,0};
+
+    for (int i=0; i<tam; i++)
+    {
+        lista[i].id=id[i];
+        strcpy(lista[i].name, nombre[i]);
+        strcpy(lista[i].lastName, apellido[i]);
+        lista[i].salary=salario[i];
+        lista[i].sector=sector[i];
+        lista[i].isEmpty=isEmpy[i];
+    }
+}
+
+void listarSectores (eSector* sectores, int tamSec)
+{
+    system("CLS");
+    printf("\n\n*************************************\n");
+    printf("*        Listado de sectores        *\n");
+    printf("*************************************\n\n");
+    printf("  id      descripcion");
+
+    for (int i=0; i < tamSec; i++ )
+    {
+        printf("\n  %d     %10s",sectores[i].idS, sectores[i].nombreSec);
+
+    }
+    printf("\n");
+}
+

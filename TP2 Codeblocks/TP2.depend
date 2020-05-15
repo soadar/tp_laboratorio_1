@@ -1,7 +1,16 @@
 # depslib dependency file v1.0
-1588305277 source:d:\daro\utn\programacion\codeblocks\tp2\utn.c
+1589336566 source:d:\daro\utn\programacion\codeblocks\tp2\utn.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
 
-1588388108 source:d:\daro\utn\programacion\codeblocks\tp2\main.c
+1589422766 source:d:\daro\utn\programacion\codeblocks\tp2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"utn.h"
+
+1589414285 d:\daro\utn\programacion\codeblocks\tp2\utn.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
