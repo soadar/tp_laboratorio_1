@@ -1,0 +1,26 @@
+# depslib dependency file v1.0
+1589662484 source:d:\daro\utn\programacion\codeblocks\tp2\utn.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1589665892 source:d:\daro\utn\programacion\codeblocks\tp2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"utn.h"
+	"ArrayEmployees.h"
+
+1589666260 d:\daro\utn\programacion\codeblocks\tp2\utn.h
+
+1589658075 source:d:\daro\utn\programacion\codeblocks\tp2\empleado.c
+
+1589665242 d:\daro\utn\programacion\codeblocks\tp2\arrayemployees.h
+
+1589665498 source:d:\daro\utn\programacion\codeblocks\tp2\arrayemployees.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"ArrayEmployees.h"
+	"utn.h"
+
