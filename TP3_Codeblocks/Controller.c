@@ -76,8 +76,8 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
     nextId(&id, pArrayListEmployee);
     auxEmp->id = id;
     utn_getNombre(auxEmp->nombre, sizeof(auxEmp->nombre), "\ningrese nombre: ", "\nError, debe ingresar solo letras", 3);
-    utn_getNumero(&auxEmp->horasTrabajadas, "\nIngrese horas trabajadas: ", "\nError, ingreso algun valor incorrecto", 1, 900, 3);
-    utn_getNumero(&auxEmp->sueldo, "\nIngrese sueldo del empleado: ", "\nError, imposible cobrar tanto", 1, 1000000, 3);
+    utn_getNumero(&auxEmp->horasTrabajadas, "\nIngrese horas trabajadas: ", "\nError, el maximo de horas a registrar es de 600", 1, 600, 3);
+    utn_getNumero(&auxEmp->sueldo, "\nIngrese sueldo del empleado: ", "\nError, maximo sueldo es $1.000.000", 1, 1000000, 3);
 
     sprintf(buffer[0], "%d", auxEmp->id);
     strcpy(buffer[1], auxEmp->nombre);
@@ -85,7 +85,6 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
     sprintf(buffer[3], "%d", auxEmp->sueldo);
 
     auxEmp = employee_newParametros(buffer[0],buffer[1],buffer[2],buffer[3]);
-    printf ("ID: %d", auxEmp->id);
 
     if (!ll_add(pArrayListEmployee, auxEmp))
     {
@@ -270,7 +269,7 @@ int controller_sortEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_saveAsText(char* path, LinkedList* pArrayListEmployee)
 {
-    int retorno=-1;
+    int retorno=1;
     Employee* auxEmp;
     FILE* f = fopen(path, "w" );
     int tam = ll_len(pArrayListEmployee);
@@ -283,25 +282,18 @@ int controller_saveAsText(char* path, LinkedList* pArrayListEmployee)
         }
         else
         {
-           fprintf(f,"id,nombre,horasTrabajadas,sueldo\n");
-
             for (int i=0; i < tam; i++)
             {
                 auxEmp = (Employee*) ll_get(pArrayListEmployee, i);
                 if (auxEmp != NULL)
                 {
                     fprintf(f,"%d,%s,%d,%d\n",auxEmp->id, auxEmp->nombre, auxEmp->horasTrabajadas, auxEmp->sueldo);
-                    retorno =0;
-                }
+                    retorno = 0;                }
             }
         }
     }
-    if (retorno == 0)
-    {
-        return retorno;
-    }
     fclose(f);
-    return 1;
+    return retorno;
 }
 
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo binario).

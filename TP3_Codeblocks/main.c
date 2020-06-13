@@ -130,7 +130,7 @@ int main()
                     printf("\nNo se pudo guardar el archivo\n");
                 }
             }
-            system("pause");
+            system("pause>nul");
             break;
         case 9:
             if (check == 2)
@@ -150,7 +150,7 @@ int main()
                     printf("\nNo se pudo guardar el archivo\n");
                 }
             }
-            system("pause");
+            system("pause>nul");
             break;
         }
     }

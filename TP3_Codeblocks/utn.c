@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 static int esFlotante(char* cadena);
 static int getFloat(float* pResultado);
 static int getString(char* cadena, int longitud);

@@ -3,6 +3,7 @@
 #include "LinkedList.h"
 #include "Employee.h"
 #include "parser.h"
+#include "utn.h"
 
 
 /** \brief Parsea los datos los datos de los empleados desde el archivo data.csv (modo texto).
